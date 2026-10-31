@@ -1,0 +1,285 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Virtual Biomedical Lab – Recording of Audiogram</title>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f1f9fd;--card:#fff;--ink:#0b2a4a;--mut:#476480;--pri:#1769c2;--cy:#d3f1fa;--ln:#cfe3ef;--R:#d62839;--L:#1769c2;--ok:#17894f;--bad:#c81e30;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#071a2e;--card:#0f2b47;--ink:#e6f4fb;--mut:#9bb8cc;--pri:#5eb1ff;--cy:#12405e;--ln:#244c6b;--R:#ff7483;--L:#6cb6ff;--ok:#4cd68c;--bad:#ff7483}}
+html{scroll-padding-top:70px}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Figtree,system-ui,sans-serif}
+h1,h2,h3{line-height:1.2;margin:0 0 .5em}h1{font-size:clamp(2rem,5vw,3.4rem);font-weight:800}h2{font-size:1.6rem}h3{font-size:1.15rem}p{margin:.4em 0;max-width:75ch}
+nav{position:sticky;top:0;z-index:20;display:flex;gap:6px;align-items:center;padding:10px 16px;background:#0b2a4a;overflow-x:auto}
+nav b{color:#8fe3ff;margin-right:auto;white-space:nowrap;padding-right:10px}
+nav button{border:0;background:transparent;color:#cfe9f7;padding:8px 14px;border-radius:20px;font:600 .95rem Figtree,sans-serif;cursor:pointer;white-space:nowrap;transition:.2s}
+nav button:hover{background:#1c4a78}nav button.on{background:#27b6e0;color:#04243d}
+button:focus-visible,input:focus-visible{outline:3px solid #27b6e0;outline-offset:2px}
+main{max-width:1180px;margin:auto;padding:22px 16px 60px}
+.card{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:20px;margin:16px 0}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center;padding:30px 0}
+.hero .tag{color:var(--pri);font-weight:600}
+.btn{border:0;border-radius:10px;padding:12px 22px;font:700 1rem Figtree,sans-serif;background:var(--pri);color:#fff;cursor:pointer;transition:.2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px #1769c255}.btn.big{font-size:1.15rem;padding:15px 30px;background:#0e8fb8}.btn.alt{background:var(--cy);color:var(--ink)}
+.team{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.team div{background:var(--cy);border-radius:10px;padding:10px 14px}.team small{display:block;color:var(--mut)}
+.three{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.three button{text-align:left;background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:18px;cursor:pointer;color:var(--ink);font:inherit;transition:.2s}
+.three button:hover{border-color:var(--pri);transform:translateY(-3px);box-shadow:0 8px 20px #1769c222}.three b{font-size:1.2rem;display:block}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:center}
+svg{max-width:100%;height:auto;display:block}
+.note{background:var(--cy);border-left:4px solid var(--pri);padding:10px 14px;border-radius:8px;font-size:.92rem}
+.leg{display:flex;gap:14px;flex-wrap:wrap;font-size:.85rem;color:var(--mut);margin-top:6px}.leg b{font-size:1rem}
+table{border-collapse:collapse;width:100%;font-size:.92rem}th,td{border:1px solid var(--ln);padding:6px 8px;text-align:center}th{background:var(--cy)}
+ol li{margin:.4em 0}
+/* simulator */
+.sim{display:grid;grid-template-columns:330px 1fr;gap:18px;align-items:start}
+.panel{background:linear-gradient(#17406b,#0b2a4a);color:#e6f4fb;border-radius:16px;padding:16px;border:3px solid #26577f}
+.panel button,.panel select{font:600 .88rem Figtree,sans-serif}
+.ph{display:flex;justify-content:space-between;margin-bottom:10px}
+.led{width:14px;height:14px;border-radius:50%;background:#345;display:inline-block}.led.on{background:#3ff08a;box-shadow:0 0 10px #3ff08a}
+.disp{background:#04151f;color:#5ff2c9;font-family:ui-monospace,monospace;border-radius:8px;padding:10px;text-align:center;min-height:92px}
+.disp .big{font-size:1.5rem}
+.pb{border:0;border-radius:8px;padding:8px 10px;background:#2a5f8f;color:#fff;cursor:pointer;margin:3px 2px;transition:.15s}
+.pb:hover:not(:disabled){background:#3a7bb5}.pb.sel{background:#27b6e0;color:#04243d}.pb:disabled{opacity:.4;cursor:not-allowed}
+.pb.pw.sel{background:#2fd57c}.pb.R.sel{background:#ff6b7a}.pb.pt{width:100%;font-size:1.05rem;padding:14px;background:#f2a900;color:#241a00;margin-top:8px}
+.panel label{display:block;margin-top:10px;font-size:.85rem;color:#9fd6ee}
+.panel input[type=range]{width:100%;accent-color:#27b6e0}
+.kn{width:46px;height:46px;border-radius:50%;background:radial-gradient(#6c8fae,#243f58);border:2px solid #9fd6ee;position:relative;transition:transform .25s;flex:none}.kn i{position:absolute;left:50%;top:3px;width:3px;height:14px;background:#fff;margin-left:-1.5px;border-radius:2px}
+.fr{display:flex;gap:12px;align-items:center}
+.resp{display:flex;align-items:center;gap:8px;margin-top:8px}.rl{width:20px;height:20px;border-radius:50%;background:#432;border:2px solid #aaa}.rl.on{background:#ff4040;box-shadow:0 0 14px #ff4040}
+.side{display:grid;gap:14px}.pat{display:grid;grid-template-columns:200px 1fr;gap:14px;align-items:center}
+.wave{opacity:0}.tone .wave{animation:w 1s infinite}@keyframes w{0%{opacity:.9;transform:scale(.6)}100%{opacity:0;transform:scale(1.4)}}.wave{transform-origin:center;transform-box:fill-box}
+@media(prefers-reduced-motion:reduce){.tone .wave{animation:none;opacity:.7}}
+.stat{padding:10px;border-radius:8px;background:var(--cy);font-weight:600}.stat.ok{color:var(--ok)}.stat.bad{color:var(--bad)}
+.chk{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:6px}
+.chk li{padding:8px 10px;border:1px solid var(--ln);border-radius:8px;font-size:.9rem}.chk li.d{background:var(--cy);color:var(--ok)}.chk li.c{border-color:var(--pri);box-shadow:0 0 0 2px #1769c244;font-weight:700}
+.bar{height:10px;background:var(--ln);border-radius:6px;overflow:hidden;margin:8px 0}.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#27b6e0,#1769c2);transition:.4s}
+.opt{display:block;border:1px solid var(--ln);border-radius:10px;padding:10px 14px;margin:8px 0;cursor:pointer}.opt:hover{border-color:var(--pri)}.opt.ok{background:#17894f33;border-color:var(--ok)}.opt.no{background:#c81e3033;border-color:var(--bad)}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+@media(max-width:860px){.hero,.g2,.sim,.pat{grid-template-columns:1fr}}
+</style></head><body>
+<nav aria-label="Main"><b>🎧 Virtual Audiometry Lab</b>
+<button data-go="home">Home</button><button data-go="theory">Theory</button><button data-go="procedure">Procedure</button><button data-go="experiment">Experiment</button><button data-go="quiz">Quiz</button><button data-go="result">Result</button></nav>
+<main>
+<!-- HOME -->
+<section class="pg" id="home">
+<div class="hero"><div>
+<div class="tag">Virtual Biomedical Laboratory</div>
+<h1>Recording of Audiogram</h1>
+<p>An audiometer plays pure tones of known frequency and loudness to each ear. The softest tone a person can just hear is their hearing threshold, and the thresholds are plotted as an audiogram.</p>
+<p><b>21BMC402J – Biomedical Equipments for Clinical Applications</b></p>
+<div class="row"><button class="btn big" data-go="experiment">Start experiment</button><button class="btn alt" data-go="theory">Read the theory</button></div></div>
+<div id="heroSvg"></div></div>
+<div class="three"><button data-go="theory"><b>Theory</b>Ear anatomy, audiometer block diagram and audiogram.</button><button data-go="experiment"><b>Experiment</b>Operate a working virtual audiometer and plot thresholds.</button><button data-go="quiz"><b>Quiz</b>12 multiple-choice questions with explanations.</button></div>
+<div class="card"><h3>VIRTUAL LAB – RECORDING OF AUDIOGRAM</h3><p>Team members</p>
+<div class="team"><div>Hema G<small>RA2311013010006</small></div><div>Rithvika Shekar<small>RA2311013010043</small></div><div>Nandhini Settu<small>RA2311013010048</small></div><div>Abinayavalli C<small>RA2311013010055</small></div></div></div>
+</section>
+
+<!-- THEORY -->
+<section class="pg" id="theory" hidden>
+<h1>Theory</h1>
+<div class="card"><h2>A. Aim</h2><p>To measure the pure tone air conduction and to study bone conduction thresholds of hearing using an audiometer.</p></div>
+<div class="card"><h2>B. Equipment required</h2><div class="g2"><div><table><tr><th>Item</th><th>Quantity</th></tr><tr><td>Audiometer</td><td>1</td></tr><tr><td>Headphones</td><td>1</td></tr></table></div><div class="g2"><div id="th1"></div><div id="th2"></div></div></div></div>
+<div class="card"><h2>C. Theory</h2>
+<p>Acuity of hearing is measured with an audiometer. The human ear responds to vibrations from <b>20 Hz to 20,000 Hz</b>.</p>
+<p>Hearing is affected by anything that interferes with conduction of sound waves to the cochlea, such as perforation of the tympanic membrane, middle-ear disease, cochlear disease, or problems in its connection with the central nervous system.</p>
+<h3>Types of audiometer</h3>
+<ul><li><b>Pure tone audiometer:</b> presents single-frequency tones at controlled levels to find air and bone conduction thresholds.</li><li><b>Speech audiometer:</b> presents recorded or live speech at controlled levels to test speech recognition and the speech reception threshold.</li></ul>
+<p><b>Air conduction:</b> transmission of sound through the external and middle ear to the inner ear. <b>Bone conduction:</b> transmission of sound to the inner ear through mechanical vibrations of the cranial bones and soft tissues.</p>
+<p><b>Threshold search:</b> the tone is first presented at a comfortable, clearly audible level, then the intensity is gradually reduced until the subject no longer perceives it; the lowest level still heard is the threshold.</p>
+<p><b>Masking:</b> when one ear is tested, sound can cross the skull to the other ear. Narrow-band white noise is fed to the non-test ear so that it cannot respond to the test tone.</p></div>
+<div class="card"><h2>D. Air conduction and bone conduction</h2><div id="earSvg"></div>
+<p class="note">Blue path: air conduction (ear canal → tympanic membrane → ossicles → cochlea). Orange path: bone conduction (vibrator → skull → cochlea).</p></div>
+<div class="card"><h2>E. Block diagram of audiometer</h2><div id="bdSvg"></div></div>
+<div class="card"><h2>F. Working principle</h2><ul>
+<li><b>Tone generator / oscillator:</b> produces pure tones, adjustable from about 250 Hz to 8 kHz.</li>
+<li><b>Noise generator:</b> produces white noise used for masking.</li>
+<li><b>Equalization circuit:</b> corrects the output so the level is calibrated across frequencies.</li>
+<li><b>Attenuator:</b> sets the intensity in dB HL, usually in 5 dB steps.</li>
+<li><b>Power amplifier:</b> drives the transducer.</li>
+<li><b>Headphones:</b> deliver air-conducted tones; the narrow-band filter shapes the noise sent to the masker.</li>
+<li><b>Bone vibrator:</b> placed on the mastoid to deliver bone-conducted tones.</li>
+<li><b>Patient response button:</b> lights the indicator when the patient hears the tone.</li></ul>
+<p><b>Why change frequency and intensity?</b> Frequency tests different regions of the cochlea; intensity finds the lowest level the patient can hear at each frequency.</p></div>
+<div class="card"><h2>G. Audiogram</h2><div class="g2"><div id="sampleAud"></div><div>
+<p>The audiogram plots frequency (Hz) on the X-axis and hearing level (dB HL) on the Y-axis, with louder levels lower on the chart. Right ear uses red, left ear uses blue. Air conduction: O (right), X (left). Bone conduction: &lt; (right), &gt; (left).</p>
+<p>Thresholds between −10 and 25 dB HL (shaded) are normal. Higher values show hearing loss. If air and bone thresholds are close together, the loss is sensorineural; if air is worse than bone by more than about 10 dB, a conductive component is present.</p>
+<p class="note">These are simulated educational sample values, not a real patient’s diagnosis.</p></div></div></div>
+<button class="btn big" data-go="procedure">Next: Procedure</button>
+</section>
+
+<!-- PROCEDURE -->
+<section class="pg" id="procedure" hidden>
+<h1>Procedure</h1>
+<div class="g2" style="align-items:start"><div class="card"><h2>Pure tone audiometer – air conduction</h2><ol>
+<li>Plug the headphones into the jack socket on the side panel.</li><li>Switch ON the audiometer.</li><li>Select RIGHT or LEFT depending on the ear being tested.</li><li>Adjust the frequency dial step by step.</li><li>Set the frequency and intensity so that the patient hears the sound.</li><li>Gradually diminish the intensity with the dB level and note the threshold.</li><li>Repeat the test to verify the reliability of the patient’s response.</li><li>Repeat the test for frequencies below 1000 Hz as described in the laboratory procedure.</li><li>Present the tone first at a higher level so the patient becomes aware of it, then reduce the intensity to the hearing threshold.</li></ol></div>
+<div class="card"><h2>Pure tone bone conduction audiometry</h2><ol><li>Plug the bone conduction vibrator into the appropriate socket.</li><li>Position the bone switch to BC.</li><li>Bone conduction can be tested up to 4000 Hz.</li><li>Follow the same testing procedure as for air conduction.</li></ol>
+<p class="note">In the simulator these steps map to: Connect headphones / bone vibrator, POWER, ear selector, AC/BC selector, frequency and dB controls, PRESENT TONE and RECORD THRESHOLD.</p></div></div>
+<button class="btn big" data-go="experiment">Practice in the simulator</button>
+</section>
+
+<!-- EXPERIMENT -->
+<section class="pg" id="experiment" hidden>
+<h1>Experiment: interactive audiometer</h1>
+<p class="note">Simulated patient: all responses and thresholds are generated by a model for educational use. No audio hardware or real patient data is used.</p>
+<div class="card"><b id="stepNow"></b><div class="bar"><i id="prog"></i></div><ul class="chk" id="chk"></ul></div>
+<div class="sim">
+<div class="panel"><div class="ph"><b>PT-200 Pure Tone Audiometer</b><span class="led" id="led"></span></div>
+<div class="disp"><div class="big" id="dF">— Hz</div><div class="big" id="dD">— dB HL</div><div id="dI">POWER OFF</div></div>
+<div class="row"><button class="pb pw" id="bPow">⏻ POWER</button><button class="pb" id="bHp">🎧 Connect headphones</button><button class="pb" id="bBv">Connect bone vibrator</button></div>
+<label>Ear</label><button class="pb R" data-ear="R">Right</button><button class="pb" data-ear="L">Left</button>
+<label>Mode (bone switch)</label><button class="pb" data-mode="AC">Air (AC)</button><button class="pb" data-mode="BC">Bone (BC)</button>
+<label>Frequency dial</label><div class="fr"><div class="kn" id="kn"><i></i></div><input type="range" id="rF" min="0" max="5" step="1" aria-label="Frequency"></div>
+<label>Hearing level: <span id="vD"></span></label><div class="fr"><button class="pb" id="dm">−5</button><input type="range" id="rD" min="-10" max="110" step="5" aria-label="Hearing level"><button class="pb" id="dp">+5</button></div>
+<label>Masking noise</label><button class="pb" id="bMask">Masker: OFF</button>
+<button class="pb pt" id="bPres">▶ PRESENT TONE</button>
+<div class="resp"><div class="rl" id="rl"></div>Patient response light</div>
+<div class="row"><button class="pb" id="bRec">✔ Record threshold</button><button class="pb" id="bClr">Clear data</button><button class="pb" id="bRes">Reset experiment</button></div></div>
+<div class="side">
+<div class="card pat" style="margin:0"><div id="patSvg"></div><div><div class="stat" id="pStat">Waiting for a tone…</div><p id="pInfo" style="font-size:.9rem;color:var(--mut)">Simulated patient response</p></div></div>
+<div class="card" style="margin:0"><h3>Live audiogram</h3><div id="liveAud"></div></div>
+<div class="card" style="margin:0"><h3>Results table (dB HL)</h3><div id="tblA"></div></div></div></div>
+<div class="row"><button class="btn" data-go="result">View final result</button></div>
+</section>
+
+<!-- QUIZ -->
+<section class="pg" id="quiz" hidden><h1>Quiz</h1><div class="card" id="qBox"></div></section>
+
+<!-- RESULT -->
+<section class="pg" id="result" hidden>
+<h1>Result</h1>
+<div class="card"><p><b>Thus, the hearing acuity was assessed using an audiometer, and the results were plotted on an audiogram.</b></p>
+<div class="g2"><div id="resAud"></div><div id="tblB"></div></div>
+<div class="row"><button class="btn" id="bDl">Download results (CSV)</button><button class="btn alt" id="bPr">Print</button><button class="btn alt" data-go="experiment">Back to experiment</button></div>
+<p class="note" style="margin-top:12px">All patient responses and measurements in this virtual lab are simulated for educational purposes.</p></div>
+</section>
+</main>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const F=[250,500,1000,2000,4000,8000];
+const TH={R_AC:[20,25,25,30,45,55],L_AC:[25,30,35,40,55,65],R_BC:[15,20,20,25,35],L_BC:[20,25,30,35,45]};
+const SAMPLE={R_AC:[15,20,20,25,40,50],L_AC:[20,25,30,40,55,65],R_BC:[10,15,15,20,35],L_BC:[15,20,25,35,50]};
+const blank=()=>({R_AC:Array(6).fill(null),L_AC:Array(6).fill(null),R_BC:Array(6).fill(null),L_BC:Array(6).fill(null)});
+let D=blank(),done=new Set(),S,last=null;
+const initS=()=>S={on:0,hp:0,bv:0,ear:'R',mode:'AC',fi:2,db:40,mask:0,busy:0};initS();
+/* ---------- navigation ---------- */
+function go(id){id=/^[a-z]+$/.test(id||'')?id:'home';if(!$('#'+id)||!$('#'+id).classList.contains('pg'))id='home';
+$$('.pg').forEach(p=>p.hidden=p.id!==id);$$('nav button').forEach(b=>b.classList.toggle('on',b.dataset.go===id));
+try{history.replaceState(null,'','#'+id)}catch(e){}scrollTo(0,0);if(id==='result')renderRes();if(id==='experiment')sync();}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b)go(b.dataset.go)});
+/* ---------- illustrations ---------- */
+function audSVG(){return `<svg viewBox="0 0 420 300" role="img" aria-label="Audiometer with headphones"><rect x="20" y="40" width="380" height="210" rx="18" fill="#17406b" stroke="#27b6e0" stroke-width="4"/><rect x="45" y="62" width="190" height="72" rx="8" fill="#04151f"/><text x="140" y="95" text-anchor="middle" fill="#5ff2c9" font-size="22" font-family="monospace">1000 Hz</text><text x="140" y="122" text-anchor="middle" fill="#5ff2c9" font-size="20" font-family="monospace">40 dB HL</text>
+<circle cx="290" cy="98" r="30" fill="#6c8fae" stroke="#9fd6ee" stroke-width="3"/><line x1="290" y1="98" x2="290" y2="76" stroke="#fff" stroke-width="4"/><circle cx="360" cy="98" r="22" fill="#6c8fae" stroke="#9fd6ee" stroke-width="3"/><line x1="360" y1="98" x2="372" y2="84" stroke="#fff" stroke-width="3"/>
+<rect x="45" y="160" width="60" height="30" rx="6" fill="#2fd57c"/><rect x="115" y="160" width="60" height="30" rx="6" fill="#ff6b7a"/><rect x="185" y="160" width="60" height="30" rx="6" fill="#27b6e0"/><rect x="255" y="160" width="110" height="30" rx="6" fill="#f2a900"/>
+<circle cx="70" cy="222" r="9" fill="#04151f"/><circle cx="110" cy="222" r="9" fill="#04151f"/><circle cx="350" cy="222" r="9" fill="#ff4040"/>
+<path d="M70 231 C60 280 20 270 30 200" fill="none" stroke="#9fd6ee" stroke-width="3"/><path d="M40 160 q-24 -40 12 -62" fill="none" stroke="#9fd6ee" stroke-width="2" opacity="0"/></svg>`}
+function hpSVG(){return `<svg viewBox="0 0 200 170" role="img" aria-label="Audiometric headphones"><path d="M30 110 C30 20 170 20 170 110" fill="none" stroke="#1769c2" stroke-width="10" stroke-linecap="round"/><rect x="14" y="90" width="38" height="62" rx="14" fill="#0b2a4a"/><rect x="148" y="90" width="38" height="62" rx="14" fill="#0b2a4a"/><circle cx="33" cy="121" r="9" fill="#27b6e0"/><circle cx="167" cy="121" r="9" fill="#27b6e0"/></svg><p style="text-align:center;font-size:.85rem">Audiometric headphones</p>`}
+function boneSVG(){return `<svg viewBox="0 0 200 170"><path d="M30 110 C30 40 150 40 150 110" fill="none" stroke="#1769c2" stroke-width="8"/><rect x="132" y="96" width="46" height="34" rx="8" fill="#f28c00"/><text x="155" y="118" text-anchor="middle" font-size="12" fill="#fff">BC</text></svg><p style="text-align:center;font-size:.85rem">Bone vibrator</p>`}
+function earSVG(){return `<svg viewBox="0 0 760 360" role="img" aria-label="Ear anatomy showing air and bone conduction"><defs><marker id="aB" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0L8 4L0 8z" fill="#1769c2"/></marker><marker id="aO" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0L8 4L0 8z" fill="#f28c00"/></marker></defs>
+<path d="M300 20 C560 0 740 90 740 200 C740 300 600 350 450 340 L300 330 Z" fill="var(--cy)" stroke="var(--pri)" stroke-width="3"/><text x="620" y="60" fill="var(--mut)" font-size="13">Skull (temporal bone)</text>
+<path d="M60 140 C20 90 90 40 130 90 C160 130 150 190 120 220 C100 250 70 230 80 200 C90 180 100 170 100 160 Z" fill="#f6c9b8" stroke="#a5654d" stroke-width="2"/><text x="40" y="270" font-size="13" fill="var(--ink)">Pinna (outer ear)</text>
+<rect x="110" y="165" width="150" height="26" fill="#f6c9b8" stroke="#a5654d"/><text x="130" y="228" font-size="13" fill="var(--ink)">Ear canal</text>
+<line x1="262" y1="150" x2="262" y2="208" stroke="#7a3b2e" stroke-width="7"/><text x="215" y="248" font-size="13" fill="var(--ink)">Tympanic membrane</text>
+<rect x="268" y="150" width="120" height="60" rx="10" fill="#fff" opacity=".8" stroke="var(--pri)"/><text x="290" y="145" font-size="13" fill="var(--ink)">Middle ear: ossicles</text>
+<rect x="276" y="172" width="22" height="9" rx="4" fill="#b08a3e"/><rect x="304" y="172" width="22" height="9" rx="4" fill="#b08a3e"/><rect x="332" y="172" width="22" height="9" rx="4" fill="#b08a3e"/><text x="276" y="198" font-size="10" fill="var(--ink)">malleus · incus · stapes</text>
+<path d="M440 180 m-34 0 a34 34 0 1 1 34 34 a24 24 0 1 1 -24 -24 a14 14 0 1 1 14 14" fill="none" stroke="#c0467a" stroke-width="6"/><text x="400" y="250" font-size="13" fill="var(--ink)">Cochlea (inner ear)</text>
+<path d="M475 185 L560 150" stroke="#e5b800" stroke-width="5"/><text x="500" y="135" font-size="13" fill="var(--ink)">Auditory nerve → brain</text>
+<path d="M5 178 L105 178" stroke="#1769c2" stroke-width="4" marker-end="url(#aB)"/><path d="M110 178 L255 178" stroke="#1769c2" stroke-width="4" marker-end="url(#aB)"/><path d="M270 178 L270 178 M388 180 L405 185" stroke="#1769c2" stroke-width="4" marker-end="url(#aB)"/><text x="10" y="165" font-size="13" font-weight="700" fill="#1769c2">Air conduction</text>
+<rect x="420" y="40" width="70" height="30" rx="8" fill="#f28c00"/><text x="455" y="60" text-anchor="middle" font-size="12" fill="#fff">Bone vibrator</text>
+<path d="M440 72 L440 140" stroke="#f28c00" stroke-width="4" stroke-dasharray="7 4" marker-end="url(#aO)"/><path d="M490 55 C560 70 560 120 490 165" fill="none" stroke="#f28c00" stroke-width="4" stroke-dasharray="7 4" marker-end="url(#aO)"/><text x="500" y="35" font-size="13" font-weight="700" fill="#c26a00">Bone conduction (skull vibration)</text></svg>`}
+function bdSVG(){const T=['Oscillator','Equalization circuit','Attenuator','Power amplifier','Test ear: headphone / bone vibrator'],N=['Noise generator','Narrow band filter','Equalization circuit','Attenuator','Power amplifier','Non-test ear masker'];
+let s=`<svg viewBox="0 0 900 340" role="img" aria-label="Audiometer block diagram"><defs><marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8z" fill="#1769c2"/></marker></defs>`;
+const row=(a,y,t)=>{s+=`<text x="20" y="${y-12}" font-weight="700" font-size="14" fill="var(--pri)">${t}</text>`;a.forEach((n,i)=>{const x=20+i*148,last=i===a.length-1,w=n.split(' ');const l1=w.length>2?w.slice(0,2).join(' '):w[0],l2=w.length>2?w.slice(2).join(' '):w.slice(1).join(' ');
+s+=`<rect x="${x}" y="${y}" width="120" height="56" rx="8" fill="${last?'#27b6e0':'var(--card)'}" stroke="var(--pri)" stroke-width="2"/><text x="${x+60}" y="${y+(l2?24:33)}" text-anchor="middle" font-size="12" fill="${last?'#04243d':'var(--ink)'}">${l1}</text>${l2?`<text x="${x+60}" y="${y+40}" text-anchor="middle" font-size="12" fill="${last?'#04243d':'var(--ink)'}">${l2}</text>`:''}`;
+if(i<a.length-1)s+=`<line x1="${x+120}" y1="${y+28}" x2="${x+146}" y2="${y+28}" stroke="#1769c2" stroke-width="2.5" marker-end="url(#ar)"/>`})};
+row(T,50,'Tone generator channel');row(N,150,'Noise generator channel');
+s+=`<text x="20" y="250" font-weight="700" font-size="14" fill="var(--pri)">Patient feedback</text><rect x="20" y="262" width="150" height="56" rx="8" fill="#f2a900"/><text x="95" y="295" text-anchor="middle" font-size="12" fill="#241a00">Patient response button</text><line x1="170" y1="290" x2="226" y2="290" stroke="#1769c2" stroke-width="2.5" marker-end="url(#ar)"/><rect x="228" y="262" width="150" height="56" rx="8" fill="#2fd57c"/><text x="303" y="295" text-anchor="middle" font-size="12" fill="#04243d">Indication section</text></svg>`;return s}
+function patSVG(){return `<svg viewBox="0 0 200 200" id="patG" role="img" aria-label="Simulated patient"><g class="wl"><circle class="wave" cx="30" cy="100" r="22" fill="none" stroke="#27b6e0" stroke-width="3"/><circle class="wave" cx="170" cy="100" r="22" fill="none" stroke="#27b6e0" stroke-width="3"/></g>
+<circle cx="100" cy="95" r="48" fill="#f6c9b8" stroke="#a5654d" stroke-width="2"/><path d="M52 88 C52 30 148 30 148 88" fill="none" stroke="#0b2a4a" stroke-width="7"/><rect x="40" y="80" width="18" height="38" rx="8" fill="#0b2a4a"/><rect x="142" y="80" width="18" height="38" rx="8" fill="#0b2a4a"/>
+<circle cx="84" cy="90" r="4" fill="#333"/><circle cx="116" cy="90" r="4" fill="#333"/><path id="pm" d="M86 118 Q100 126 114 118" fill="none" stroke="#7a3b2e" stroke-width="3"/><rect x="60" y="150" width="80" height="40" rx="10" fill="#1769c2"/><rect id="pBtn" x="72" y="160" width="56" height="20" rx="6" fill="#7aa" /><text x="100" y="175" text-anchor="middle" font-size="10" fill="#fff">RESPOND</text></svg>`}
+/* ---------- audiogram ---------- */
+function audGraph(el,d){const W=560,H=380,l=52,t=26,r=14,b=48,w=W-l-r,h=H-t-b,X=i=>l+(i+.5)*w/6,Y=v=>t+(v+10)/130*h;
+let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Audiogram"><rect x="${l}" y="${Y(-10)}" width="${w}" height="${Y(25)-Y(-10)}" fill="var(--cy)"/>`;
+for(let v=-10;v<=120;v+=10)s+=`<line x1="${l}" x2="${l+w}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--ln)"/><text x="${l-6}" y="${Y(v)+4}" text-anchor="end" font-size="10" fill="var(--mut)">${v}</text>`;
+F.forEach((f,i)=>s+=`<line x1="${X(i)}" x2="${X(i)}" y1="${t}" y2="${t+h}" stroke="var(--ln)"/><text x="${X(i)}" y="${t+h+16}" text-anchor="middle" font-size="11" fill="var(--mut)">${f}</text>`);
+s+=`<text x="${l+w/2}" y="${H-8}" text-anchor="middle" font-size="12" fill="var(--ink)">Frequency (Hz)</text><text transform="translate(13 ${t+h/2}) rotate(-90)" text-anchor="middle" font-size="12" fill="var(--ink)">Hearing level (dB HL)</text>`;
+[['R_AC','var(--R)','O',''],['L_AC','var(--L)','X','6 4'],['R_BC','var(--R)','&lt;',null],['L_BC','var(--L)','&gt;',null]].forEach(([k,c,m,dash])=>{const pts=d[k].map((v,i)=>v==null?null:[X(i),Y(v)]).filter(Boolean);
+if(dash!==null&&pts.length>1)s+=`<polyline points="${pts.map(p=>p.join(',')).join(' ')}" fill="none" stroke="${c}" stroke-width="2" ${dash?`stroke-dasharray="${dash}"`:''}/>`;
+pts.forEach(p=>s+=`<text x="${p[0]}" y="${p[1]+6}" text-anchor="middle" font-size="18" font-weight="800" fill="${c}">${m}</text>`)});
+el.innerHTML=s+`</svg><div class="leg"><span style="color:var(--R)"><b>O</b> Right AC</span><span style="color:var(--L)"><b>X</b> Left AC</span><span style="color:var(--R)"><b>&lt;</b> Right BC</span><span style="color:var(--L)"><b>&gt;</b> Left BC</span><span>Shaded: normal (≤ 25 dB HL)</span></div>`}
+function table(el){let h='<table><tr><th>Frequency (Hz)</th><th>Right Ear AC</th><th>Left Ear AC</th><th>Right Ear BC</th><th>Left Ear BC</th></tr>';
+F.forEach((f,i)=>{const c=k=>k.endsWith('BC')&&i===5?'N/T':(D[k][i]==null?'—':D[k][i]);h+=`<tr><td>${f}</td><td>${c('R_AC')}</td><td>${c('L_AC')}</td><td>${c('R_BC')}</td><td>${c('L_BC')}</td></tr>`});el.innerHTML=h+'</table><p style="font-size:.8rem;color:var(--mut)">N/T = not tested (BC limited to 4000 Hz). Simulated values.</p>'}
+/* ---------- simulator ---------- */
+const STEPS=['Connect the headphones','Switch ON the audiometer','Select the ear to be tested','Select the test frequency','Adjust the sound intensity','Present the tone','Record the patient’s response','Repeat for different frequencies','Perform bone conduction testing','Generate and observe the audiogram'];
+const cnt=k=>D[k].filter(v=>v!=null).length;
+function msg(t,c){const e=$('#pStat');e.textContent=t;e.className='stat '+(c||'')}
+function sync(){const k=S.ear+'_'+S.mode;
+if(S.mode==='BC'&&S.fi===5)S.fi=4;
+$('#led').className='led'+(S.on?' on':'');$('#bPow').classList.toggle('sel',!!S.on);
+$('#bHp').classList.toggle('sel',!!S.hp);$('#bHp').textContent=S.hp?'🎧 Headphones connected':'🎧 Connect headphones';
+$('#bBv').classList.toggle('sel',!!S.bv);$('#bBv').textContent=S.bv?'Bone vibrator connected':'Connect bone vibrator';
+$$('[data-ear]').forEach(b=>b.classList.toggle('sel',b.dataset.ear===S.ear));$$('[data-mode]').forEach(b=>b.classList.toggle('sel',b.dataset.mode===S.mode));
+$('#rF').value=S.fi;$('#rF').max=S.mode==='BC'?4:5;$('#kn').style.transform=`rotate(${-120+S.fi*48}deg)`;$('#rD').value=S.db;$('#vD').textContent=S.db+' dB HL';
+$('#bMask').textContent='Masker: '+(S.mask?'ON':'OFF');$('#bMask').classList.toggle('sel',!!S.mask);
+['#rF','#rD','#dm','#dp','#bPres','#bRec','#bMask','[data-ear]','[data-mode]'].forEach(q=>$$(q).forEach(e=>e.disabled=!S.on));
+$('#dF').textContent=S.on?F[S.fi]+' Hz':'— Hz';$('#dD').textContent=S.on?S.db+' dB HL':'— dB HL';
+$('#dI').textContent=S.on?(S.ear==='R'?'RIGHT':'LEFT')+' · '+(S.mode==='AC'?'AIR':'BONE')+(S.mask?' · MASK':''):'POWER OFF';
+if(S.hp)done.add(0);if(S.on)done.add(1);
+const c8=Math.max(cnt('R_AC'),cnt('L_AC'))>=3,c9=cnt('R_BC')+cnt('L_BC')>0,c10=c8&&c9&&cnt('R_AC')>0&&cnt('L_AC')>0;
+const f=[0,1,2,3,4,5,6].map(i=>done.has(i));f.push(c8,c9,c10);
+const cur=f.indexOf(false);
+$('#chk').innerHTML=STEPS.map((t,i)=>`<li class="${f[i]?'d':i===cur?'c':''}">${f[i]?'✔':i+1+'.'} ${t}</li>`).join('');
+$('#stepNow').textContent=cur<0?'All steps completed. View the final result.':'Current step: '+STEPS[cur];$('#prog').style.width=f.filter(Boolean).length*10+'%';
+audGraph($('#liveAud'),D);table($('#tblA'))}
+function present(){if(!S.on||S.busy)return;
+if(S.mode==='AC'&&!S.hp)return msg('Connect the headphones first.','bad');
+if(S.mode==='BC'&&!S.bv)return msg('Connect the bone vibrator first.','bad');
+S.busy=1;done.add(5);const snap={ear:S.ear,mode:S.mode,fi:S.fi,db:S.db};
+$('#patSvg').classList.add('tone');msg(`Tone ON: ${snap.ear==='R'?'Right':'Left'} ear, ${F[snap.fi]} Hz, ${snap.db} dB HL (${snap.mode})…`);$('#dI').textContent='♪ TONE PRESENTED';
+setTimeout(()=>{$('#patSvg').classList.remove('tone');const thr=TH[snap.ear+'_'+snap.mode][snap.fi],heard=snap.db>=thr;last={...snap,heard,thr};S.busy=0;
+$('#rl').classList.toggle('on',heard);$('#pBtn').setAttribute('fill',heard?'#ff4040':'#7aa');$('#pm').setAttribute('d',heard?'M86 118 Q100 134 114 118':'M86 124 L114 124');
+msg(heard?'Patient heard the tone (simulated): button pressed.':'No response (simulated): tone not perceived.',heard?'ok':'bad');
+$('#pInfo').textContent=`Simulated response · ${snap.ear==='R'?'Right':'Left'} ear · ${F[snap.fi]} Hz · ${snap.db} dB HL`+(S.mask?' · masker on in non-test ear':'');
+setTimeout(()=>{$('#rl').classList.remove('on');$('#pBtn').setAttribute('fill','#7aa')},1200);sync()},1200)}
+function record(){if(!S.on)return;const k=S.ear+'_'+S.mode;
+if(!last||last.ear!==S.ear||last.mode!==S.mode||last.fi!==S.fi||last.db!==S.db)return msg('Present the tone at these settings before recording.','bad');
+if(!last.heard)return msg('Patient did not respond. Increase the level, then present the tone again.','bad');
+if(S.db>last.thr)return msg('Patient still responds at lower levels. Reduce by 5 dB and present again to find the threshold.','bad');
+D[k][S.fi]=S.db;done.add(6);msg(`Threshold recorded: ${S.db} dB HL at ${F[S.fi]} Hz (${k.replace('_',' ')}).`,'ok');sync()}
+const chg=()=>{S.fi=+$('#rF').value;done.add(3);last=null;sync()};
+$('#bPow').onclick=()=>{S.on=S.on?0:1;if(!S.on){last=null;msg('Audiometer switched OFF.')}else msg('Audiometer ON. Select ear, frequency and level.');sync()};
+$('#bHp').onclick=()=>{S.hp=S.hp?0:1;sync()};$('#bBv').onclick=()=>{S.bv=S.bv?0:1;sync()};
+$$('[data-ear]').forEach(b=>b.onclick=()=>{S.ear=b.dataset.ear;done.add(2);sync()});
+$$('[data-mode]').forEach(b=>b.onclick=()=>{S.mode=b.dataset.mode;sync()});
+$('#rF').oninput=chg;
+const setDb=v=>{S.db=Math.max(-10,Math.min(110,v));done.add(4);sync()};$('#rD').oninput=e=>setDb(+e.target.value);$('#dm').onclick=()=>setDb(S.db-5);$('#dp').onclick=()=>setDb(S.db+5);
+$('#bMask').onclick=()=>{S.mask=S.mask?0:1;sync()};$('#bPres').onclick=present;$('#bRec').onclick=record;
+$('#bClr').onclick=()=>{D=blank();last=null;done.delete(6);msg('Recorded data cleared.');sync()};
+$('#bRes').onclick=()=>{D=blank();done.clear();last=null;initS();msg('Experiment reset. Waiting for a tone…');sync()};
+/* ---------- quiz ---------- */
+const Q=[
+['What is the audible frequency range of the human ear?',['20 Hz – 20,000 Hz','2 Hz – 200 Hz','200 Hz – 2,000 Hz','20 kHz – 200 kHz'],0,'The human ear responds to vibrations from about 20 Hz to 20,000 Hz.'],
+['What does an audiometer measure?',['Blood pressure','Acuity of hearing','Lung volume','Heart rate'],1,'An audiometer measures hearing acuity by finding hearing thresholds.'],
+['Air conduction carries sound through…',['Skull bones only','Ear canal, tympanic membrane and ossicles to the cochlea','The auditory nerve only','Jaw muscles'],1,'Air conduction passes through the external and middle ear to the inner ear.'],
+['Bone conduction delivers sound by…',['Air pressure in the canal','Electrical stimulation','Mechanical vibration of cranial bones','Ossicle movement only'],2,'A bone vibrator sets the skull vibrating, which stimulates the cochlea directly.'],
+['Why is masking noise applied?',['To amplify the test tone','To stop the non-test ear from hearing the test tone','To calibrate the attenuator','To protect the headphones'],1,'Noise in the non-test ear prevents cross-hearing of the tone.'],
+['The hearing threshold is…',['The loudest tolerable sound','The lowest intensity the subject can just perceive','The average of all frequencies','The frequency of the oscillator'],1,'Threshold is the softest level at which the tone is heard.'],
+['Which block sets the tone level in dB HL?',['Oscillator','Noise generator','Attenuator','Headphone'],2,'The attenuator controls the output intensity.'],
+['Approximate oscillator range in a pure tone audiometer?',['20 Hz – 100 Hz','250 Hz – 8 kHz','10 kHz – 40 kHz','1 MHz – 2 MHz'],1,'Test frequencies run from about 250 Hz to 8 kHz.'],
+['Up to which frequency is bone conduction tested here?',['1000 Hz','2000 Hz','4000 Hz','8000 Hz'],2,'Bone conduction testing is limited to 4000 Hz.'],
+['An audiogram plots…',['dB HL (X) against time (Y)','Frequency (X) against hearing level in dB HL (Y)','Pressure against volume','Voltage against current'],1,'Frequency is on the X-axis and hearing level on the Y-axis.'],
+['Which block follows the noise generator in the masking channel?',['Narrow band filter','Bone vibrator','Response button','Oscillator'],0,'Noise passes through a narrow band filter, then equalization, attenuator and amplifier.'],
+['Which hearing level is generally considered normal?',['Above 60 dB HL','−10 to 25 dB HL','Above 90 dB HL','Only 0 dB HL'],1,'Thresholds up to about 25 dB HL are normal.']];
+let qi=0,sc=0,ans=false;
+function renderQ(){const b=$('#qBox');if(qi>=Q.length){const p=Math.round(sc/Q.length*100);b.innerHTML=`<h2>Final score: ${sc} / ${Q.length}</h2><h3>${p}%</h3><p>${p>=80?'Excellent understanding of audiometry.':p>=50?'Good effort. Review the theory and try again.':'Please revise the theory and retake the quiz.'}</p><button class="btn" id="qRe">Retake quiz</button>`;$('#qRe').onclick=()=>{qi=0;sc=0;renderQ()};return}
+const q=Q[qi];ans=false;b.innerHTML=`<p>Question ${qi+1} of ${Q.length}</p><div class="bar"><i style="width:${qi/Q.length*100}%"></i></div><h3>${q[0]}</h3>${q[1].map((o,i)=>`<label class="opt"><input type="radio" name="o" value="${i}"> ${o}</label>`).join('')}<div id="qFb"></div><button class="btn" id="qSub">Submit answer</button>`;
+$('#qSub').onclick=()=>{if(ans){qi++;renderQ();return}const c=$('input[name=o]:checked');if(!c){$('#qFb').innerHTML='<p class="stat bad">Select an option first.</p>';return}
+ans=true;const v=+c.value;if(v===q[2])sc++;$$('.opt').forEach((l,i)=>{l.querySelector('input').disabled=true;if(i===q[2])l.classList.add('ok');else if(i===v)l.classList.add('no')});
+$('#qFb').innerHTML=`<p class="stat ${v===q[2]?'ok':'bad'}">${v===q[2]?'Correct!':'Incorrect.'} ${q[3]}</p>`;$('#qSub').textContent=qi===Q.length-1?'See final score':'Next question'}}
+/* ---------- result ---------- */
+function renderRes(){audGraph($('#resAud'),D);table($('#tblB'))}
+$('#bDl').onclick=()=>{try{let c='Frequency (Hz),Right AC,Left AC,Right BC,Left BC\n';F.forEach((f,i)=>{c+=[f,...['R_AC','L_AC','R_BC','L_BC'].map(k=>D[k][i]==null?'':D[k][i])].join(',')+'\n'});c+='Note,All values are simulated for educational purposes\n';
+const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([c],{type:'text/csv'}));a.download='audiogram_results.csv';document.body.appendChild(a);a.click();a.remove()}catch(e){alert('Download is not available here. Please host the page (for example on GitHub Pages) to download.')}};
+$('#bPr').onclick=()=>{try{window.print()}catch(e){}};
+/* ---------- init ---------- */
+$('#heroSvg').innerHTML=audSVG();$('#th1').innerHTML=hpSVG();$('#th2').innerHTML=boneSVG();$('#earSvg').innerHTML=earSVG();$('#bdSvg').innerHTML=bdSVG();$('#patSvg').innerHTML=patSVG();
+audGraph($('#sampleAud'),SAMPLE);renderQ();sync();
+addEventListener('hashchange',()=>go(location.hash.slice(1)));go(location.hash.slice(1)||'home');
+</script></body></html>
